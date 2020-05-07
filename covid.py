@@ -3,6 +3,7 @@ from math import ceil
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import torch
 import torchvision
 from PIL import Image
 from matplotlib import cm
@@ -84,27 +85,27 @@ def display(train_val):
 
 
 def main():
+    run_model("base_resnet18", models.resnet18(pretrained=True, progress=True))
+    run_model("base_resnet34", models.resnet34(pretrained=True, progress=True))
+    run_model("base_resnet50", models.resnet50(pretrained=True, progress=True))
+
+
+def run_model(name, model):
     train_dataset = CovidDataset(train_csv, train_dir)
     test_dataset = CovidDataset(test_csv, test_dir)
-
     # display(train_dataset)
-
-    resnet18 = models.resnet18(pretrained=True)
-    resnet18.cuda()
-
+    model.cuda()
     use_gpu = True
     n_epoch = 10
     batch_size = 32
-    learning_rate = 0.0005
-    optimizer = optim.Adam(resnet18.parameters(), lr=learning_rate)
-
-    history = train(resnet18, optimizer, train_dataset, n_epoch, batch_size, use_gpu=use_gpu)
-
+    learning_rate = 0.00001
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    history = train(model, optimizer, train_dataset, n_epoch, batch_size, use_gpu=use_gpu)
     history.display()
-
-    test_acc, test_loss, covid_recall, covid_accuracy = test(resnet18, test_dataset, batch_size, use_gpu=use_gpu)
+    test_acc, test_loss, covid_recall, covid_accuracy = test(model, test_dataset, batch_size, use_gpu=use_gpu)
     print('Test:\n\tLoss: {}\n\tAccuracy: {}'.format(test_loss, test_acc))
     print('Test recall on Covid: {:.2f} - Test accuracy on Covid: {:.2f}'.format(covid_recall, covid_accuracy))
+    torch.save(model.state_dict(), "./" + name)
 
 
 if __name__ == "__main__":

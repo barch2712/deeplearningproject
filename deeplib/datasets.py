@@ -9,6 +9,7 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision.datasets.mnist import MNIST
 from torchvision.datasets.cifar import CIFAR10
 
+from const import COVID_LABEL
 
 BASE_PATH = '~/GLO-4030/datasets/'
 
@@ -53,7 +54,7 @@ def train_valid_loaders(dataset, batch_size, train_split=0.8, shuffle=True):
     indices = np.arange(num_data)
 
     if shuffle:
-        np.random.shuffle(indices)
+        random.Random(33).shuffle(indices)
 
     split = math.floor(train_split * num_data)
     train_idx, valid_idx = indices[:split], indices[split:]
