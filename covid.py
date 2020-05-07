@@ -95,7 +95,7 @@ def main():
     use_gpu = True
     n_epoch = 10
     batch_size = 32
-    learning_rate = 0.005
+    learning_rate = 0.0005
     optimizer = optim.Adam(resnet18.parameters(), lr=learning_rate)
 
     history = train(resnet18, optimizer, train_dataset, n_epoch, batch_size, use_gpu=use_gpu)

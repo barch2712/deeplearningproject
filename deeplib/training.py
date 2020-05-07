@@ -98,7 +98,7 @@ def train(model, optimizer, dataset, n_epoch, batch_size, use_gpu=True, schedule
 
         train_acc, train_loss, covid_recall_train, covid_accuracy_train = validate(model, train_loader, use_gpu)
         val_acc, val_loss, covid_recall_valid, covid_accuracy_valid = validate(model, val_loader, use_gpu)
-        history.save(train_acc, val_acc, train_loss, val_loss, optimizer.param_groups[0]['lr'])
+        history.save(train_acc, val_acc, train_loss, val_loss, optimizer.param_groups[0]['lr'], covid_recall_train, covid_recall_valid, covid_accuracy_train, covid_accuracy_valid)
         print('Epoch {} - Train acc: {:.2f} - Val acc: {:.2f} - Train loss: {:.4f} - Val loss: {:.4f} - Training time: {:.2f}s'.format(i,
                                                                                                               train_acc,
                                                                                                               val_acc,
