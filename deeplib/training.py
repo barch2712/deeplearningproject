@@ -2,9 +2,10 @@ import torch
 import torch.nn as nn
 import time
 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 from torch.utils.data.sampler import SequentialSampler
 
+from const import COVID_LABEL
 from deeplib.history import History
 from deeplib.datasets import train_valid_loaders
 
@@ -38,7 +39,13 @@ def validate(model, val_loader, use_gpu=True):
             pred.extend(predictions.data.cpu().numpy().tolist())
 
     model.train(True)
-    return accuracy_score(true, pred) * 100, sum(val_loss) / len(val_loss)
+
+    covid_true = [i == COVID_LABEL for i in true]
+    covid_pred = [i == COVID_LABEL for i in pred]
+    covid_recall = recall_score(covid_true, covid_pred) * 100
+    covid_accuracy = accuracy_score(covid_true, covid_pred) * 100
+
+    return accuracy_score(true, pred) * 100, sum(val_loss) / len(val_loss), covid_recall, covid_accuracy
 
 
 def validate_ranking(model, val_loader, use_gpu=True):
@@ -89,15 +96,18 @@ def train(model, optimizer, dataset, n_epoch, batch_size, use_gpu=True, schedule
         do_epoch(criterion, model, optimizer, scheduler, train_loader, use_gpu)
         end = time.time()
 
-        train_acc, train_loss = validate(model, train_loader, use_gpu)
-        val_acc, val_loss = validate(model, val_loader, use_gpu)
+        train_acc, train_loss, covid_recall_train, covid_accuracy_train = validate(model, train_loader, use_gpu)
+        val_acc, val_loss, covid_recall_valid, covid_accuracy_valid = validate(model, val_loader, use_gpu)
         history.save(train_acc, val_acc, train_loss, val_loss, optimizer.param_groups[0]['lr'])
         print('Epoch {} - Train acc: {:.2f} - Val acc: {:.2f} - Train loss: {:.4f} - Val loss: {:.4f} - Training time: {:.2f}s'.format(i,
                                                                                                               train_acc,
                                                                                                               val_acc,
                                                                                                               train_loss,
                                                                                                               val_loss, end - start))
-
+        print('Covid inforamtions - Train recall: {:.2f} - Val recall: {:.2f} - Train accuracy: {:.2f} - Val accuracy: {:.2f}'.format(covid_recall_train,
+                                                                                                                                      covid_recall_valid,
+                                                                                                                                      covid_accuracy_train,
+                                                                                                                                      covid_accuracy_valid))
 
     return history
 
@@ -128,5 +138,5 @@ def test(model, test_dataset, batch_size, use_gpu=True):
     sampler = SequentialSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, sampler=sampler)
 
-    score, loss = validate(model, test_loader, use_gpu=use_gpu)
-    return score
+    score, loss, covid_recall, covid_accuracy = validate(model, test_loader, use_gpu=use_gpu)
+    return score, loss, covid_recall, covid_accuracy

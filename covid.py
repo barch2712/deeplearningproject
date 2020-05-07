@@ -15,6 +15,7 @@ from skimage.color import rgb2gray, gray2rgb
 from torchvision import models, transforms
 from torchvision.transforms.functional import center_crop
 
+from const import COVID_LABEL, NORMAL_LABEL, PNEUMONIA_LABEL
 from deeplib.training import train, test
 
 train_csv = pd.read_csv("dataset/data-extractor/train_split_v3.txt", header=None, sep=" ", usecols=range(0, 4))
@@ -32,7 +33,7 @@ class CovidDataset(Dataset):
         self.datadir = datadir
         self.target_transform = None
         self.transform = None
-        self.label_no = {"normal": 0, "pneumonia": 1, "COVID-19": 2}
+        self.label_no = {"normal": NORMAL_LABEL, "pneumonia": PNEUMONIA_LABEL, "COVID-19": COVID_LABEL}
 
     def __len__(self):
         return self.length
@@ -41,26 +42,6 @@ class CovidDataset(Dataset):
         im = io.imread(self.datadir + self.file_names[idx])
         im = gray2rgb(im)
 
-        # im = Image.open(self.datadir + self.file_names[idx])
-
-        # im = Image.fromarray(im)
-        # im = transforms.Resize(224, 224)(im)
-
-        # wanted_size = [224, 224]
-        # if im.shape[0] < wanted_size[0] or im.shape[1] < wanted_size[1]:
-        #     im = pad(im, [ceil((wanted_size[0] - im.shape[0])/2), ceil((wanted_size[1] - im.shape[1])/2)])
-        # center_crop(im, wanted_size)
-        # im = resize(im, wanted_size, interpolation=2)
-
-        # im = transforms.ToTensor()(im)
-        # im = im[:wanted_size, :wanted_size]
-
-        # im = np.moveaxis(im, 0, -1)
-        # if im.shape[1] < wanted_size or im.shape[2] < wanted_size:
-        #     wanted_size
-        #     im = transforms.Pad(())
-
-        # im = Image.fromarray(im.numpy(), mode='L')
         im = im[:, :, :3]
         im = Image.fromarray(im)
 
@@ -112,7 +93,7 @@ def main():
     resnet18.cuda()
 
     use_gpu = True
-    n_epoch = 0
+    n_epoch = 10
     batch_size = 32
     learning_rate = 0.005
     optimizer = optim.Adam(resnet18.parameters(), lr=learning_rate)
@@ -121,8 +102,9 @@ def main():
 
     history.display()
 
-    test_acc, test_loss = test(resnet18, test_dataset, batch_size, use_gpu=use_gpu)
+    test_acc, test_loss, covid_recall, covid_accuracy = test(resnet18, test_dataset, batch_size, use_gpu=use_gpu)
     print('Test:\n\tLoss: {}\n\tAccuracy: {}'.format(test_loss, test_acc))
+    print('Test recall on Covid: {:.2f} - Test accuracy on Covid: {:.2f}'.format(covid_recall, covid_accuracy))
 
 
 if __name__ == "__main__":
