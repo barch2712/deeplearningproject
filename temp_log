@@ -1,0 +1,11 @@
+pretrain resnet18
+Epoch 0 - Train acc: 86.70 - Val acc: 86.39 - Train loss: 1.4885 - Val loss: 1.4836 - Training time: 401.90s
+Covid inforamtions - Train recall: 0.00 - Val recall: 0.00 - Train accuracy: 100.00 - Val accuracy: 99.96
+Epoch 1 - Train acc: 92.24 - Val acc: 91.25 - Train loss: 0.7211 - Val loss: 0.7774 - Training time: 307.71s
+Covid inforamtions - Train recall: 0.00 - Val recall: 0.00 - Train accuracy: 100.00 - Val accuracy: 100.00
+Epoch 2 - Train acc: 93.30 - Val acc: 92.26 - Train loss: 0.3934 - Val loss: 0.4785 - Training time: 297.93s
+Covid inforamtions - Train recall: 0.00 - Val recall: 0.00 - Train accuracy: 100.00 - Val accuracy: 100.00
+Epoch 3 - Train acc: 94.24 - Val acc: 93.20 - Train loss: 0.3423 - Val loss: 0.4465 - Training time: 299.30s
+Covid inforamtions - Train recall: 0.00 - Val recall: 0.00 - Train accuracy: 100.00 - Val accuracy: 100.00
+
+

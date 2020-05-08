@@ -1,0 +1,78 @@
+learning_rate = 0.00001
+
+Epoch 0 - Train acc: 91.15 - Val acc: 89.70 - Train loss: 0.8013 - Val loss: 0.8749 - Training time: 289.82s
+Covid inforamtions - Train recall: 12.94 - Val recall: 9.43 - Train accuracy: 98.56 - Val accuracy: 98.13
+Epoch 1 - Train acc: 93.28 - Val acc: 91.39 - Train loss: 0.3414 - Val loss: 0.4527 - Training time: 285.62s
+Covid inforamtions - Train recall: 54.71 - Val recall: 37.74 - Train accuracy: 99.14 - Val accuracy: 98.50
+Epoch 2 - Train acc: 94.79 - Val acc: 91.61 - Train loss: 0.2185 - Val loss: 0.3458 - Training time: 287.04s
+Covid inforamtions - Train recall: 68.24 - Val recall: 45.28 - Train accuracy: 99.37 - Val accuracy: 98.68
+Epoch 3 - Train acc: 96.50 - Val acc: 91.90 - Train loss: 0.1425 - Val loss: 0.3084 - Training time: 291.54s
+Covid inforamtions - Train recall: 83.53 - Val recall: 50.94 - Train accuracy: 99.70 - Val accuracy: 98.79
+Epoch 4 - Train acc: 97.88 - Val acc: 92.05 - Train loss: 0.0908 - Val loss: 0.2830 - Training time: 284.94s
+Covid inforamtions - Train recall: 89.41 - Val recall: 52.83 - Train accuracy: 99.82 - Val accuracy: 98.94
+Epoch 5 - Train acc: 98.82 - Val acc: 91.46 - Train loss: 0.0647 - Val loss: 0.2834 - Training time: 285.86s
+Covid inforamtions - Train recall: 94.12 - Val recall: 56.60 - Train accuracy: 99.90 - Val accuracy: 98.94
+Epoch 6 - Train acc: 99.03 - Val acc: 92.38 - Train loss: 0.0450 - Val loss: 0.3074 - Training time: 286.76s
+Covid inforamtions - Train recall: 94.71 - Val recall: 50.94 - Train accuracy: 99.92 - Val accuracy: 98.90
+Epoch 7 - Train acc: 99.83 - Val acc: 92.16 - Train loss: 0.0208 - Val loss: 0.3030 - Training time: 290.41s
+Covid inforamtions - Train recall: 97.65 - Val recall: 60.38 - Train accuracy: 99.96 - Val accuracy: 99.08
+Epoch 8 - Train acc: 99.88 - Val acc: 92.41 - Train loss: 0.0182 - Val loss: 0.3046 - Training time: 290.32s
+Covid inforamtions - Train recall: 98.82 - Val recall: 64.15 - Train accuracy: 99.98 - Val accuracy: 99.12
+Epoch 9 - Train acc: 99.98 - Val acc: 92.23 - Train loss: 0.0098 - Val loss: 0.3032 - Training time: 286.81s
+Covid inforamtions - Train recall: 98.82 - Val recall: 58.49 - Train accuracy: 99.98 - Val accuracy: 99.05
+Test:
+	Loss: 0.26301404978585197
+	Accuracy: 92.3841059602649
+Test recall on Covid: 54.84 - Test accuracy on Covid: 99.01
+Downloading: "https://download.pytorch.org/models/resnet34-333f7ec4.pth" to C:\Users\Christian/.cache\torch\checkpoints\resnet34-333f7ec4.pth
+100.0%
+Epoch 0 - Train acc: 92.57 - Val acc: 91.53 - Train loss: 0.4481 - Val loss: 0.5478 - Training time: 329.84s
+Covid inforamtions - Train recall: 22.94 - Val recall: 15.09 - Train accuracy: 98.77 - Val accuracy: 98.35
+Epoch 1 - Train acc: 94.76 - Val acc: 92.41 - Train loss: 0.1964 - Val loss: 0.3356 - Training time: 324.97s
+Covid inforamtions - Train recall: 68.82 - Val recall: 47.17 - Train accuracy: 99.43 - Val accuracy: 98.86
+Epoch 2 - Train acc: 96.64 - Val acc: 92.60 - Train loss: 0.1168 - Val loss: 0.2911 - Training time: 335.38s
+Covid inforamtions - Train recall: 90.00 - Val recall: 58.49 - Train accuracy: 99.80 - Val accuracy: 98.94
+Epoch 3 - Train acc: 98.57 - Val acc: 92.89 - Train loss: 0.0620 - Val loss: 0.3193 - Training time: 324.05s
+Covid inforamtions - Train recall: 97.06 - Val recall: 52.83 - Train accuracy: 99.95 - Val accuracy: 98.90
+Epoch 4 - Train acc: 99.31 - Val acc: 93.00 - Train loss: 0.0302 - Val loss: 0.3413 - Training time: 325.41s
+Covid inforamtions - Train recall: 98.24 - Val recall: 50.94 - Train accuracy: 99.97 - Val accuracy: 98.94
+Epoch 5 - Train acc: 99.59 - Val acc: 91.02 - Train loss: 0.0291 - Val loss: 0.3479 - Training time: 328.47s
+Covid inforamtions - Train recall: 99.41 - Val recall: 58.49 - Train accuracy: 99.99 - Val accuracy: 98.90
+Epoch 6 - Train acc: 100.00 - Val acc: 92.16 - Train loss: 0.0072 - Val loss: 0.3913 - Training time: 322.38s
+Covid inforamtions - Train recall: 100.00 - Val recall: 50.94 - Train accuracy: 100.00 - Val accuracy: 98.83
+Epoch 7 - Train acc: 99.94 - Val acc: 92.19 - Train loss: 0.0065 - Val loss: 0.4084 - Training time: 323.38s
+Covid inforamtions - Train recall: 100.00 - Val recall: 62.26 - Train accuracy: 100.00 - Val accuracy: 98.94
+Epoch 8 - Train acc: 100.00 - Val acc: 92.85 - Train loss: 0.0040 - Val loss: 0.3798 - Training time: 325.36s
+Covid inforamtions - Train recall: 100.00 - Val recall: 50.94 - Train accuracy: 100.00 - Val accuracy: 98.94
+Epoch 9 - Train acc: 99.99 - Val acc: 92.38 - Train loss: 0.0039 - Val loss: 0.3847 - Training time: 327.24s
+Covid inforamtions - Train recall: 100.00 - Val recall: 60.38 - Train accuracy: 100.00 - Val accuracy: 99.01
+Test:
+	Loss: 0.3017525844697957
+	Accuracy: 93.04635761589404
+Test recall on Covid: 77.42 - Test accuracy on Covid: 99.47
+Downloading: "https://download.pytorch.org/models/resnet50-19c8e357.pth" to C:\Users\Christian/.cache\torch\checkpoints\resnet50-19c8e357.pth
+100.0%
+Epoch 0 - Train acc: 93.13 - Val acc: 91.68 - Train loss: 0.3542 - Val loss: 0.4390 - Training time: 438.94s
+Covid inforamtions - Train recall: 47.65 - Val recall: 39.62 - Train accuracy: 99.08 - Val accuracy: 98.72
+Epoch 1 - Train acc: 95.65 - Val acc: 92.96 - Train loss: 0.1513 - Val loss: 0.2822 - Training time: 434.31s
+Covid inforamtions - Train recall: 83.53 - Val recall: 64.15 - Train accuracy: 99.60 - Val accuracy: 98.97
+Epoch 2 - Train acc: 97.86 - Val acc: 93.11 - Train loss: 0.0754 - Val loss: 0.2682 - Training time: 431.56s
+Covid inforamtions - Train recall: 95.88 - Val recall: 62.26 - Train accuracy: 99.94 - Val accuracy: 99.12
+Epoch 3 - Train acc: 99.56 - Val acc: 92.85 - Train loss: 0.0378 - Val loss: 0.2782 - Training time: 435.05s
+Covid inforamtions - Train recall: 99.41 - Val recall: 71.70 - Train accuracy: 99.98 - Val accuracy: 99.16
+Epoch 4 - Train acc: 99.65 - Val acc: 93.26 - Train loss: 0.0193 - Val loss: 0.3150 - Training time: 433.01s
+Covid inforamtions - Train recall: 100.00 - Val recall: 67.92 - Train accuracy: 100.00 - Val accuracy: 99.27
+Epoch 5 - Train acc: 99.97 - Val acc: 92.93 - Train loss: 0.0086 - Val loss: 0.3235 - Training time: 433.98s
+Covid inforamtions - Train recall: 100.00 - Val recall: 69.81 - Train accuracy: 100.00 - Val accuracy: 99.12
+Epoch 6 - Train acc: 99.59 - Val acc: 93.00 - Train loss: 0.0156 - Val loss: 0.3323 - Training time: 442.32s
+Covid inforamtions - Train recall: 97.65 - Val recall: 67.92 - Train accuracy: 99.96 - Val accuracy: 99.12
+Epoch 7 - Train acc: 99.86 - Val acc: 92.74 - Train loss: 0.0075 - Val loss: 0.3307 - Training time: 438.42s
+Covid inforamtions - Train recall: 91.18 - Val recall: 50.94 - Train accuracy: 99.86 - Val accuracy: 98.94
+Epoch 8 - Train acc: 100.00 - Val acc: 93.11 - Train loss: 0.0026 - Val loss: 0.3386 - Training time: 437.74s
+Covid inforamtions - Train recall: 100.00 - Val recall: 77.36 - Train accuracy: 100.00 - Val accuracy: 99.34
+Epoch 9 - Train acc: 99.98 - Val acc: 92.96 - Train loss: 0.0028 - Val loss: 0.4069 - Training time: 449.17s
+Covid inforamtions - Train recall: 100.00 - Val recall: 71.70 - Train accuracy: 100.00 - Val accuracy: 99.23
+Test:
+	Loss: 0.32196987586212344
+	Accuracy: 93.17880794701988
+Test recall on Covid: 67.74 - Test accuracy on Covid: 99.21

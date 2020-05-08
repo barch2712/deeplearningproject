@@ -1,4 +1,9 @@
 dataset/
+*.png
+
+# nets
+base_resnet*
+nocov_resnet*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

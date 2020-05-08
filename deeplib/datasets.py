@@ -1,5 +1,7 @@
 import math
 import random
+import time
+
 import numpy as np
 import torch
 import torch.utils.data
@@ -9,9 +11,11 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision.datasets.mnist import MNIST
 from torchvision.datasets.cifar import CIFAR10
 
-from const import COVID_LABEL
+from const import COVID_LABEL, NORMAL_LABEL, PNEUMONIA_LABEL
 
 BASE_PATH = '~/GLO-4030/datasets/'
+
+get_special_sample = None
 
 
 def load_mnist(download=False, path=os.path.join(BASE_PATH, 'mnist')):
@@ -59,8 +63,75 @@ def train_valid_loaders(dataset, batch_size, train_split=0.8, shuffle=True):
     split = math.floor(train_split * num_data)
     train_idx, valid_idx = indices[:split], indices[split:]
 
-    train_sampler = SubsetRandomSampler(train_idx)
-    valid_sampler = SubsetRandomSampler(valid_idx)
+    if get_special_sample == "no_covid":
+        a=time.time()
+        # if True:
+        #     labels = np.asarray([dataset[indice][1] for indice in indices])
+        #     with open('shuffled_labels.txt', 'w') as filehandle:
+        #         for label in labels:
+        #             filehandle.write('%s\n' % label)
+        if True:
+            labels = []
+            with open('shuffled_labels.txt', 'r') as filehandle:
+                for line in filehandle:
+                    current_place = line[:-1]
+                    labels.append(current_place)
+
+        covid_labels = labels == COVID_LABEL
+        train_covid_msk, valid_covid_msk = covid_labels[:split], covid_labels[split:]
+        nb_covid_train = sum(train_covid_msk)
+
+        normal_labels = labels == NORMAL_LABEL
+        train_normal_msk, valid_normal_msk = normal_labels[:split], normal_labels[split:]
+        train_normal_idx, valid_normal_idx = train_idx[train_normal_msk], valid_idx[valid_normal_msk]
+        train_normal_nocov_idx = train_normal_idx[:-nb_covid_train]
+
+        pneu_labels = labels == PNEUMONIA_LABEL
+        train_pneu_msk, valid_pneu_msk = pneu_labels[:split], pneu_labels[split:]
+        train_pneu_idx, valid_pneu_idx = train_idx[train_pneu_msk], valid_idx[valid_pneu_msk]
+        train_pneu_nocov_idx = train_pneu_idx[:-nb_covid_train]
+
+        train_sampler = SubsetRandomSampler(np.concatenate((train_normal_nocov_idx, train_pneu_nocov_idx), axis=None))
+        valid_sampler = SubsetRandomSampler(np.concatenate((valid_normal_idx, valid_pneu_idx), axis=None))
+
+        print(time.time() - a)
+    elif get_special_sample == "covid_uniform":
+        a = time.time()
+        # if True:
+        #     labels = [dataset[indice][1] for indice in indices]
+        #     with open('shuffled_labels.txt', 'w') as filehandle:
+        #         for label in labels:
+        #             filehandle.write('%s\n' % label)
+        if True:
+            labels = []
+            with open('shuffled_labels.txt', 'r') as filehandle:
+                for line in filehandle:
+                    current_place = line[:-1]
+                    labels.append(int(current_place))
+
+        labels = np.asarray(labels)
+        covid_labels = labels == COVID_LABEL
+        train_covid_msk, valid_covid_msk = covid_labels[:split], covid_labels[split:]
+        train_covid_idx, valid_covid_idx = train_idx[train_covid_msk], valid_idx[valid_covid_msk]
+        nb_covid_train, nb_covid_valid = sum(train_covid_msk), sum(valid_covid_msk)
+
+        normal_labels = labels == NORMAL_LABEL
+        train_normal_msk, valid_normal_msk = normal_labels[:split], normal_labels[split:]
+        train_normal_idx, valid_normal_idx = train_idx[train_normal_msk], valid_idx[valid_normal_msk]
+        train_normal_cov_idx, valid_normal_cov_idx = train_normal_idx[-nb_covid_train:], valid_normal_idx[-nb_covid_valid:]
+
+        pneu_labels = labels == PNEUMONIA_LABEL
+        train_pneu_msk, valid_pneu_msk = pneu_labels[:split], pneu_labels[split:]
+        train_pneu_idx, valid_pneu_idx = train_idx[train_pneu_msk], valid_idx[valid_pneu_msk]
+        train_pneu_cov_idx, valid_pneu_cov_idx = train_pneu_idx[-nb_covid_train:], valid_pneu_idx[-nb_covid_valid:]
+
+        train_sampler = SubsetRandomSampler(np.concatenate((train_covid_idx, train_normal_cov_idx, train_pneu_cov_idx), axis=None))
+        valid_sampler = SubsetRandomSampler(np.concatenate((valid_covid_idx, valid_normal_cov_idx, valid_pneu_cov_idx), axis=None))
+
+        print(time.time() - a)
+    else:
+        train_sampler = SubsetRandomSampler(train_idx)
+        valid_sampler = SubsetRandomSampler(valid_idx)
 
     train_loader = torch.utils.data.DataLoader(dataset,
                     batch_size=batch_size, sampler=train_sampler)

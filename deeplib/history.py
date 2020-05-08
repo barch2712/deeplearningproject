@@ -1,3 +1,5 @@
+import copy
+
 import matplotlib.pyplot as plt
 
 
@@ -14,9 +16,19 @@ class History:
             'covid_recall_valid': [],
             'covid_accuracy_train': [],
             'covid_accuracy_valid': [],
+            'covid_f1_train': [],
+            'covid_f1_valid': [],
+            'model': [],
         }
 
-    def save(self, train_acc, val_acc, train_loss, val_loss, lr, covid_recall_train, covid_recall_valid, covid_accuracy_train, covid_accuracy_valid):
+    def save(self, train_acc, val_acc, train_loss, val_loss, lr, epoch, model, covid_recall_train, covid_recall_valid, covid_accuracy_train, covid_accuracy_valid):
+        if not self.history['model']:
+            model_copy = copy.deepcopy(model)
+            self.history['model'] = (epoch, model_copy)
+        else:
+            if val_acc > max(self.history['val_acc']):
+                model_copy = copy.deepcopy(model)
+                self.history['model'] = (epoch, model_copy)
         self.history['train_acc'].append(train_acc)
         self.history['val_acc'].append(val_acc)
         self.history['train_loss'].append(train_loss)
@@ -26,6 +38,8 @@ class History:
         self.history['covid_recall_valid'].append(covid_recall_valid)
         self.history['covid_accuracy_train'].append(covid_accuracy_train)
         self.history['covid_accuracy_valid'].append(covid_accuracy_valid)
+        self.history['covid_f1_train'].append(2 * (covid_accuracy_train * covid_recall_train) / (covid_accuracy_train + covid_recall_train))
+        self.history['covid_f1_valid'].append(2 * (covid_accuracy_valid * covid_recall_valid) / (covid_accuracy_valid + covid_recall_valid))
 
     def display_accuracy(self):
         epoch = len(self.history['train_acc'])
@@ -62,7 +76,7 @@ class History:
         epoch = len(self.history['train_acc'])
         epochs = [x for x in range(1, epoch + 1)]
 
-        fig, axes = plt.subplots(3, 1)
+        fig, axes = plt.subplots(2, 1)
         plt.tight_layout()
 
         axes[0].set_xlabel('Epochs')
@@ -76,9 +90,9 @@ class History:
         axes[1].plot(epochs, self.history['train_loss'], label='Train')
         axes[1].plot(epochs, self.history['val_loss'], label='Validation')
 
-        axes[2].set_xlabel('Epochs')
-        axes[2].set_ylabel('Lr')
-        axes[2].plot(epochs, self.history['lr'], label='Lr')
+        # axes[2].set_xlabel('Epochs')
+        # axes[2].set_ylabel('Lr')
+        # axes[2].plot(epochs, self.history['lr'], label='Lr')
 
         plt.show()
 
@@ -92,8 +106,19 @@ class History:
         axes[0].legend()
 
         axes[1].set_xlabel('Epochs')
-        axes[1].set_ylabel('Covid Accuracy')
+        axes[1].set_ylabel('Covid Precision')
         axes[1].plot(epochs, self.history['covid_accuracy_train'], label='Train')
         axes[1].plot(epochs, self.history['covid_accuracy_valid'], label='Validation')
+
+        plt.show()
+
+        fig, axes = plt.subplots(1, 1)
+        plt.tight_layout()
+
+        axes[0].set_xlabel('Epochs')
+        axes[0].set_ylabel('Covid F1 Score')
+        axes[0].plot(epochs, self.history['covid_f1_train'], label='Train')
+        axes[0].plot(epochs, self.history['covid_f1_valid'], label='Validation')
+        axes[0].legend()
 
         plt.show()

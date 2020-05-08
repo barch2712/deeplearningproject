@@ -88,6 +88,7 @@ def train(model, optimizer, dataset, n_epoch, batch_size, use_gpu=True, schedule
     dataset.transform = transforms.Compose([
         transforms.Resize([wanted_size, wanted_size]),
         transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
     train_loader, val_loader = train_valid_loaders(dataset, batch_size=batch_size)
 
@@ -98,16 +99,17 @@ def train(model, optimizer, dataset, n_epoch, batch_size, use_gpu=True, schedule
 
         train_acc, train_loss, covid_recall_train, covid_accuracy_train = validate(model, train_loader, use_gpu)
         val_acc, val_loss, covid_recall_valid, covid_accuracy_valid = validate(model, val_loader, use_gpu)
-        history.save(train_acc, val_acc, train_loss, val_loss, optimizer.param_groups[0]['lr'], covid_recall_train, covid_recall_valid, covid_accuracy_train, covid_accuracy_valid)
+        history.save(train_acc, val_acc, train_loss, val_loss, optimizer.param_groups[0]['lr'], i, model, covid_recall_train, covid_recall_valid, covid_accuracy_train, covid_accuracy_valid)
         print('Epoch {} - Train acc: {:.2f} - Val acc: {:.2f} - Train loss: {:.4f} - Val loss: {:.4f} - Training time: {:.2f}s'.format(i,
                                                                                                               train_acc,
                                                                                                               val_acc,
                                                                                                               train_loss,
                                                                                                               val_loss, end - start))
-        print('Covid inforamtions - Train recall: {:.2f} - Val recall: {:.2f} - Train accuracy: {:.2f} - Val accuracy: {:.2f}'.format(covid_recall_train,
+        print('Covid inforamtions - Train recall: {:.2f} - Val recall: {:.2f} - Train precision: {:.2f} - Val precision: {:.2f}'.format(covid_recall_train,
                                                                                                                                       covid_recall_valid,
                                                                                                                                       covid_accuracy_train,
                                                                                                                                       covid_accuracy_valid))
+        print('Train f1 score: {:.2f} - Val f1 score: {:.2f}'.format(history.history["covid_f1_train"][-1], history.history["covid_f1_valid"][-1]))
 
     return history
 
