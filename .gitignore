@@ -4,6 +4,9 @@ dataset/
 # nets
 base_resnet*
 nocov_resnet*
+modelcovid*
+archives/
+modelno*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

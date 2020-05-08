@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import time
 
-from sklearn.metrics import accuracy_score, recall_score
+from sklearn.metrics import accuracy_score, recall_score, precision_score
 from torch.utils.data.sampler import SequentialSampler
 
 from const import COVID_LABEL
@@ -43,9 +43,9 @@ def validate(model, val_loader, use_gpu=True):
     covid_true = [i == COVID_LABEL for i in true]
     covid_pred = [i == COVID_LABEL for i in pred]
     covid_recall = recall_score(covid_true, covid_pred) * 100
-    covid_accuracy = accuracy_score(covid_true, covid_pred) * 100
+    covid_precision = precision_score(covid_true, covid_pred) * 100
 
-    return accuracy_score(true, pred) * 100, sum(val_loss) / len(val_loss), covid_recall, covid_accuracy
+    return accuracy_score(true, pred) * 100, sum(val_loss) / len(val_loss), covid_recall, covid_precision
 
 
 def validate_ranking(model, val_loader, use_gpu=True):
@@ -110,6 +110,7 @@ def train(model, optimizer, dataset, n_epoch, batch_size, use_gpu=True, schedule
                                                                                                                                       covid_accuracy_train,
                                                                                                                                       covid_accuracy_valid))
         print('Train f1 score: {:.2f} - Val f1 score: {:.2f}'.format(history.history["covid_f1_train"][-1], history.history["covid_f1_valid"][-1]))
+        print("")
 
     return history
 
@@ -136,6 +137,7 @@ def test(model, test_dataset, batch_size, use_gpu=True):
     test_dataset.transform = transforms.Compose([
         transforms.Resize([wanted_size, wanted_size]),
         transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
     sampler = SequentialSampler(test_dataset)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, sampler=sampler)

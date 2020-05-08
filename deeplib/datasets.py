@@ -75,8 +75,9 @@ def train_valid_loaders(dataset, batch_size, train_split=0.8, shuffle=True):
             with open('shuffled_labels.txt', 'r') as filehandle:
                 for line in filehandle:
                     current_place = line[:-1]
-                    labels.append(current_place)
+                    labels.append(int(current_place))
 
+        labels = np.asarray(labels)
         covid_labels = labels == COVID_LABEL
         train_covid_msk, valid_covid_msk = covid_labels[:split], covid_labels[split:]
         nb_covid_train = sum(train_covid_msk)
@@ -94,7 +95,7 @@ def train_valid_loaders(dataset, batch_size, train_split=0.8, shuffle=True):
         train_sampler = SubsetRandomSampler(np.concatenate((train_normal_nocov_idx, train_pneu_nocov_idx), axis=None))
         valid_sampler = SubsetRandomSampler(np.concatenate((valid_normal_idx, valid_pneu_idx), axis=None))
 
-        print(time.time() - a)
+        # print(time.time() - a)
     elif get_special_sample == "covid_uniform":
         a = time.time()
         # if True:
@@ -118,17 +119,19 @@ def train_valid_loaders(dataset, batch_size, train_split=0.8, shuffle=True):
         normal_labels = labels == NORMAL_LABEL
         train_normal_msk, valid_normal_msk = normal_labels[:split], normal_labels[split:]
         train_normal_idx, valid_normal_idx = train_idx[train_normal_msk], valid_idx[valid_normal_msk]
-        train_normal_cov_idx, valid_normal_cov_idx = train_normal_idx[-nb_covid_train:], valid_normal_idx[-nb_covid_valid:]
+        # train_normal_cov_idx, valid_normal_cov_idx = train_normal_idx[-nb_covid_train:], valid_normal_idx[-nb_covid_valid:]
+        train_normal_cov_idx, valid_normal_cov_idx = train_normal_idx[-nb_covid_train:], valid_normal_idx
 
         pneu_labels = labels == PNEUMONIA_LABEL
         train_pneu_msk, valid_pneu_msk = pneu_labels[:split], pneu_labels[split:]
         train_pneu_idx, valid_pneu_idx = train_idx[train_pneu_msk], valid_idx[valid_pneu_msk]
-        train_pneu_cov_idx, valid_pneu_cov_idx = train_pneu_idx[-nb_covid_train:], valid_pneu_idx[-nb_covid_valid:]
+        # train_pneu_cov_idx, valid_pneu_cov_idx = train_pneu_idx[-nb_covid_train:], valid_pneu_idx[-nb_covid_valid:]
+        train_pneu_cov_idx, valid_pneu_cov_idx = train_pneu_idx[-nb_covid_train:], valid_pneu_idx
 
         train_sampler = SubsetRandomSampler(np.concatenate((train_covid_idx, train_normal_cov_idx, train_pneu_cov_idx), axis=None))
         valid_sampler = SubsetRandomSampler(np.concatenate((valid_covid_idx, valid_normal_cov_idx, valid_pneu_cov_idx), axis=None))
 
-        print(time.time() - a)
+        # print(time.time() - a)
     else:
         train_sampler = SubsetRandomSampler(train_idx)
         valid_sampler = SubsetRandomSampler(valid_idx)

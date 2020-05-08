@@ -115,10 +115,10 @@ class History:
         fig, axes = plt.subplots(1, 1)
         plt.tight_layout()
 
-        axes[0].set_xlabel('Epochs')
-        axes[0].set_ylabel('Covid F1 Score')
-        axes[0].plot(epochs, self.history['covid_f1_train'], label='Train')
-        axes[0].plot(epochs, self.history['covid_f1_valid'], label='Validation')
-        axes[0].legend()
+        axes.set_xlabel('Epochs')
+        axes.set_ylabel('Covid F1 Score')
+        axes.plot(epochs, self.history['covid_f1_train'], label='Train')
+        axes.plot(epochs, self.history['covid_f1_valid'], label='Validation')
+        axes.legend()
 
         plt.show()
